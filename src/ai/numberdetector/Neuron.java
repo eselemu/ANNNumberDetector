@@ -14,7 +14,6 @@ public class Neuron {
     private Random random = new Random();
 
     public Neuron(int nInputs) {
-        // Xavier/Glorot initialization - much better for sigmoid
         double scale = Math.sqrt(2.0 / nInputs);
         random = new Random();
 

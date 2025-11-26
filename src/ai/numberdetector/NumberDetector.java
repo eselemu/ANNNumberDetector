@@ -1,17 +1,47 @@
 package ai.numberdetector;
 
+import ai.numberdetector.image.file.MNISTData;
+import ai.numberdetector.image.file.MNISTLoader;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class NumberDetector {
 
-    public static int nBrains = 5;
-    public static int epochs = 10000;
-    public static double step = 0.4;
-    public static Brain[] brains;
+    public static final String TRAINING_IMG_FILE = "dataset/train-images.idx3-ubyte";
+    public static final String TRAINING_LBL_FILE = "./dataset/train-labels.idx1-ubyte";
+    public static final String TEST_IMG_FILE = "./dataset/t10k-images.idx3-ubyte";
+    public static final String TEST_LBL_FILE = "./dataset/t10k-labels.idx1-ubyte";
 
+    public static final int nBrains = 5;
+    public static final int epochs = 10000;
+    public static final double step = 0.4;
+    public static Brain[] brains;
     public static Brain brain = null;
 
+    public static MNISTData trainImages;
+    public static MNISTData testImages;
+    public static int[] trainLabels;
+    public static int[] testLabels;
+
     public static void main(String[] args){
+        loadDataset();
+    }
+    public static void loadDataset() {
+        try {
+            trainImages = MNISTLoader.loadImages(TRAINING_IMG_FILE);
+            trainLabels = MNISTLoader.loadLabels(TRAINING_LBL_FILE);
+
+            testImages = MNISTLoader.loadImages(TEST_IMG_FILE);
+            testLabels = MNISTLoader.loadLabels(TEST_LBL_FILE);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void runXOR(){
         double tempSSE = Double.MAX_VALUE;
         brains = new Brain[nBrains];
         for(int b = 0; b < nBrains; b++){
