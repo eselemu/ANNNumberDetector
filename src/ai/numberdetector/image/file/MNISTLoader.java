@@ -24,16 +24,16 @@ public class MNISTLoader {
             System.out.println("Loading " + numImages + " images of " + numRows + "x" + numCols);
 
             // Read image data
-            List<int[]> images = new ArrayList<>();
+            List<double[]> images = new ArrayList<>();
             byte[] buffer = new byte[numRows * numCols];
 
             for (int i = 0; i < numImages; i++) {
                 dis.readFully(buffer);
-                int[] normalizedPixels = new int[numRows * numCols];
+                double[] normalizedPixels = new double[numRows * numCols];
 
                 // Normalize pixels to 0.0-1.0 range
                 for (int j = 0; j < buffer.length; j++) {
-                    normalizedPixels[j] = ((buffer[j] & 0xFF) / 255.0) > 0.5 ? 1 : 0;
+                    normalizedPixels[j] = ((buffer[j] & 0xFF) / 255.0) > 0.5 ? 1.0 : 0.0;
                 }
                 images.add(normalizedPixels);
             }
