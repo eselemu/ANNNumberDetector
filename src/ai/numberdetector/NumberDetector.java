@@ -96,35 +96,29 @@ public class NumberDetector {
 
     private static void testSingleImage(int index, boolean saveImage) {
         try {
-            // Get the image and label
             double[] pixels = testImages.images.get(index);
             int actualLabel = testLabels[index];
 
-            // Make prediction
             List<Double> imagePixels = arrayToList(pixels);
             List<Double> result = brain.evaluate(imagePixels);
             int predicted = brain.predictDigit(result);
 
-            // Get confidence scores (output values)
             List<Double> confidences = new ArrayList<>();
             for (int i = 0; i < result.size(); i++) {
                 confidences.add(result.get(i));
             }
 
-            // Display results
             System.out.println("\n=== IMAGE " + index + " ===");
             System.out.println("Actual digit: " + actualLabel);
             System.out.println("Predicted digit: " + predicted);
             System.out.println(predicted == actualLabel ? "✓ CORRECT" : "✗ WRONG");
 
-            // Display confidence scores
             System.out.println("\nConfidence scores:");
             for (int i = 0; i < confidences.size(); i++) {
                 System.out.printf("  %d: %.4f%s\n", i, confidences.get(i),
                         i == predicted ? " ← PREDICTED" : i == actualLabel ? " ← ACTUAL" : "");
             }
 
-            // Save image as BMP if requested
             if (saveImage) {
                 String filename = String.format("output/test_images/image_%04d_label_%d_pred_%d.bmp",
                         index, actualLabel, predicted);
@@ -174,7 +168,6 @@ public class NumberDetector {
         System.out.println("Learning rate (alpha): " + brain.ann.alpha);
     }
 
-    // Add this method to your existing code
     public static void testSamplePredictions() {
         System.out.println("\n=== SAMPLE PREDICTIONS (First 10 images) ===");
         for (int i = 0; i < 10; i++) {
@@ -187,7 +180,6 @@ public class NumberDetector {
         }
     }
 
-    // Helper method
     private static List<Double> arrayToList(double[] array) {
         List<Double> list = new ArrayList<>();
         for (double value : array) {
@@ -196,7 +188,6 @@ public class NumberDetector {
         return list;
     }
 
-    // Rest of your existing methods (loadDataset, trainMNISTNetworks, etc.) remain the same
     public static void loadDataset() {
         try {
             trainImages = MNISTLoader.loadImages(TRAINING_IMG_FILE);
@@ -218,13 +209,11 @@ public class NumberDetector {
         double bestAccuracy = 0;
         brains = new Brain[nBrains];
 
-        // MNIST architecture: 784 inputs, 10 outputs, 1 hidden layer, 128 neurons, 0.1 alpha
         for(int b = 0; b < nBrains; b++){
             brains[b] = new Brain("Brain " + b, 50, 784, 10, 1, 128, 0.1);
             brains[b].start();
         }
 
-        // Wait for all brains to finish training
         for(int b = 0; b < nBrains; b++){
             try {
                 brains[b].join();
@@ -233,7 +222,6 @@ public class NumberDetector {
             }
         }
 
-        // Select best brain based on accuracy
         for(int b = 0; b < nBrains; b++){
             double testAccuracy = brains[b].evaluateOnTestSet();
             System.out.println("Brain " + b + " Test Accuracy: " + (testAccuracy * 100) + "%");

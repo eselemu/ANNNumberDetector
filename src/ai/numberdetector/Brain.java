@@ -40,31 +40,24 @@ public class Brain extends Thread {
             correctPredictions = 0;
             totalSamples = 0;
 
-            // Train on all training images (or a subset for speed)
             for (int i = 0; i < 6000; i++) {
-                // Get image pixels (already normalized 0.0-1.0)
                 List<Double> imagePixels = arrayToList(NumberDetector.trainImages.images.get(i));
 
-                // Convert label to one-hot encoding
                 int label = NumberDetector.trainLabels[i];
                 List<Double> oneHotLabel = toOneHot(label);
 
-                // Train on this image
                 List<Double> result = train(imagePixels, oneHotLabel);
 
-                // Calculate error
                 for (int j = 0; j < result.size(); j++) {
                     sumSquareError += Math.pow(result.get(j) - oneHotLabel.get(j), 2);
                 }
 
-                // Track accuracy
                 if (predictDigit(result) == label) {
                     correctPredictions++;
                 }
                 totalSamples++;
             }
 
-            // Calculate accuracy for this epoch
             accuracy = (double) correctPredictions / totalSamples;
 
             if (epoch % 10 == 0) {  // Print progress every 10 epochs
@@ -84,7 +77,6 @@ public class Brain extends Thread {
         return list;
     }
 
-    // Convert digit label to one-hot encoding
     private List<Double> toOneHot(int digit) {
         List<Double> oneHot = new ArrayList<>();
         for (int i = 0; i < nOutputs; i++) {

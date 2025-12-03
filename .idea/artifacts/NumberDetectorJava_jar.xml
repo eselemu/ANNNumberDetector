@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NumberDetectorJava:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NumberDetectorJava_jar</output-path>
+    <root id="archive" name="NumberDetectorJava.jar">
+      <element id="module-output" name="NumberDetectorJava" />
+    </root>
+  </artifact>
+</component>
